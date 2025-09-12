@@ -65,6 +65,7 @@ local Button = Tab:Button({
     Locked = false,
     Callback = function()
             Window:Destroy()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/Chariacthus/Obsidian/refs/heads/main/main.lua"))()
     end
 })
 
