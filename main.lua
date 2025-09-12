@@ -1,24 +1,34 @@
 local WindUI = loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/releases/latest/download/main.lua"))()
 
 local Window = WindUI:CreateWindow({
-    Title = "My Super script | Test Hub",
-    Icon = "door-open",
-    Author = "Example UI",
-    Folder = "MyTestHub",
+    Title = "Obsidian",
+    Icon = "sparkle",
+    Author = "By char",
+    Folder = "obsidian",
+    SideBarWidth = 200,
+    HideSearchBar = false,
+    ScrollBarEnabled = true,
 })
 
-Window:EditOpenButton({
-    Title = "Open Example UI",
-    Icon = "monitor",
-    CornerRadius = UDim.new(0,16),
-    StrokeThickness = 2,
-    Color = ColorSequence.new( -- gradient
-        Color3.fromHex("FF0F7B"), 
-        Color3.fromHex("F89B29")
-    ),
-    OnlyMobile = false,
-    Enabled = true,
-    Draggable = true,
+local Main = Window:Tab({
+    Title = "Main",
+    Icon = "house",
+    Locked = false,
 })
+
+local Section = Tab:Section({ 
+    Title = "Info",
+    TextXAlignment = "Left",
+    TextSize = 17, -- Default Size
+})
+
+local Paragraph = Main:Paragraph({
+    Title = "",
+    Desc = "Test Paragraph",
+    Locked = false,
+})
+
+
+Window:SelectTab(1)
 
 Window:ToggleTransparency(true)
