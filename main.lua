@@ -1,69 +1,129 @@
--- Load WindUI
-local WindUI = loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/releases/latest/download/main.lua"))()
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/deividcomsono/Obsidian/refs/heads/main/Library.lua"))()
 
--- Create the window
-local Window = WindUI:CreateWindow({
+local Window = Library:CreateWindow({
     Title = "Obsidian",
-    Icon = "sparkle",
-    Author = "By char",
-    Folder = "obsidian",
-    SideBarWidth = 200,
-    HideSearchBar = false,
-    ScrollBarEnabled = true,
+    Footer = "v1.0.0",
+    ToggleKeybind = Enum.KeyCode.RightControl,
+    Center = true,
+    AutoShow = true
 })
 
--- Create tabs
-local Main = Window:Tab({ Title = "Main", Icon = "house", Locked = false })
-local Game = Window:Tab({ Title = "Game Scripts", Icon = "gamepad-2", Locked = false })
-local Universal = Window:Tab({ Title = "Universal Scripts", Icon = "earth", Locked = false })
-local Settings = Window:Tab({ Title = "Settings", Icon = "settings", Locked = false })
+local MainTab = Window:AddTab("Main", "house", "Overview & Info")
+local GameTab = Window:AddTab("Game Scripts", "gamepad-2", "Search to find games")
+local UniversalTab = Window:AddTab("Universal Scripts", "earth", "Scripts for any game")
+local SettingsTab = Window:AddTab("Settings", "settings", "Settings & Configurations")
+local CreditsTab = Window:AddTab("Credits", "star", "Credits & Acknowledgements")
 
+-- Developers
+local DevelopersBox = CreditsTab:AddLeftGroupbox("Developers", "user-pen")
+DevelopersBox:AddLabel("char — Lead Developer")
+DevelopersBox:AddLabel("bitdancerr — Developer")
 
--- Section in Main tab
-local Section = Main:Section({ 
-    Title = "Info",
-    TextXAlignment = "Left",
-    TextSize = 17,
+-- Contributors / Library
+local ContributorsBox = CreditsTab:AddRightGroupbox("Contributors", "users")
+ContributorsBox:AddLabel("bitdancerr")
+ContributorsBox:AddLabel("deividcomsono")
+
+-- Version Info
+local VersionBox = CreditsTab:AddLeftGroupbox("Version", "history")
+VersionBox:AddLabel("Current Version: 1.0.0")
+VersionBox:AddLabel("Last Updated: 13/9/25")
+
+-- How to Contribute
+local ContributeBox = CreditsTab:AddLeftGroupbox("Want to Contribute?", "info")
+ContributeBox:AddLabel({
+    Text = "Submit feature suggestions on the Main page. Approved ideas will earn you a spot on the contributor list.",
+    DoesWrap = true
 })
 
--- Get player display name
-local Players = game:GetService("Players")
-local player = Players.LocalPlayer or Players.PlayerAdded:Wait()
-local displayname = player.DisplayName or player.Name
 
--- Paragraph in Main tab with display name
-local WelcomeParagraph = Main:Paragraph({
-    Title = "Welcome " .. displayname .. ".",
-    Desc = "Obsidian focuses on quality, which is one of the reasons why it does not include a scripthub.",
-    Locked = false,
+local LeftGroupbox = MainTab:AddLeftGroupbox("Information", "info")
+local RightGroupbox = MainTab:AddRightGroupbox("Changelog", "info")
+
+local displayName = game.Players.LocalPlayer.DisplayName
+LeftGroupbox:AddLabel("Hello " .. displayName)
+
+LeftGroupbox:AddLabel({
+    Text = "Welcome to Obsidian. Please note this script hub is still in BETA, so bugs may occur.",
+    DoesWrap = true
+})
+RightGroupbox:AddLabel({
+    Text = [[
+v1.0.0 - 13/9/25
+
+- Initial release of Obsidian
+- Added MainPage, Added Support for 50+ games, Added 20 Universal Scripts, and 10 FE Scripts, Settings, and Credits.
+- Implemented bug report and suggestion inputs with webhook
+- Added version info and developer/contributor credits
+- UI improvements for groupboxes and labels
+- Basic Changelog tab with wrapped text support
+]],
+    DoesWrap = true
 })
 
-local Button = Universal:Button({
-    Title = "Infinite Yield",
-    Desc = "Infinite Yield is a popular admin command script for Roblox.",
-    Locked = false,
-    Callback = function()
-        loadstring(game:HttpGet(('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'),true))()
+
+local Tabbox = MainTab:AddLeftTabbox("Settings")
+local Tab1 = Tabbox:AddTab("Report")
+local Tab2 = Tabbox:AddTab("Suggest")
+
+local WebhookURL = "https://discord.com/api/webhooks/1416373366880735282/q4BY9rsChDMljM1kOdG6CKdhJ8VO-oNrRryOO5s3JIByA6Wqqa2CM3SxwtH_vKoVbcNK"
+local HttpService = game:GetService("HttpService")
+
+local function SendToWebhook(content)
+    local jsonData = HttpService:JSONEncode({content = content})
+    if syn then
+        syn.request({
+            Url = WebhookURL,
+            Method = "POST",
+            Headers = {["Content-Type"] = "application/json"},
+            Body = jsonData
+        })
+    elseif http_request then
+        http_request({
+            Url = WebhookURL,
+            Method = "POST",
+            Headers = {["Content-Type"] = "application/json"},
+            Body = jsonData
+        })
+    elseif fluxus then
+        fluxus.request({
+            Url = WebhookURL,
+            Method = "POST",
+            Headers = {["Content-Type"] = "application/json"},
+            Body = jsonData
+        })
+    else
+        warn("No supported HTTP request function found.")
+    end
+end
+
+-- General tab input (Bug Reports)
+-- General tab input (Bug Reports)
+Tab1:AddInput("ReportInput", {
+    Text = "Report",
+    Default = "",
+    Numeric = false,
+    Finished = true,
+    Placeholder = "Please describe the bug in detail",
+    Callback = function(Value)
+        if Value ~= "" then
+            local playerName = game.Players.LocalPlayer.Name
+            SendToWebhook("🐞 **Bug Report from "..playerName.."**:\n"..Value)
+        end
     end
 })
 
-local Button = Universal:Button({
-    Title = "Dark Dex",
-    Desc = "Dark Dex is a Roblox tool that lets you explore and edit objects and scripts in a game.",
-    Locked = false,
-    Callback = function()
-        loadstring(game:HttpGet('https://raw.githubusercontent.com/AlterX404/DarkDEX-V5/refs/heads/main/DarkDEX-V5', true))()
+-- Advanced tab input (Suggestions)
+Tab2:AddInput("SuggestInput", {
+    Text = "Suggest",
+    Default = "",
+    Numeric = false,
+    Finished = true,
+    Placeholder = "Provide a suggestion for improvement",
+    Callback = function(Value)
+        if Value ~= "" then
+            local playerName = game.Players.LocalPlayer.Name
+            SendToWebhook("💡 **Suggestion from "..playerName.."**:\n"..Value)
+        end
     end
 })
-
-local Button = Universal:Button({
-    Title = "Dark Dex",
-    Desc = "Dark Dex is a Roblox tool that lets you explore and edit objects and scripts in a game.",
-    Locked = false,
-    Callback = function()
-        loadstring(game:HttpGet('https://raw.githubusercontent.com/AlterX404/DarkDEX-V5/refs/heads/main/DarkDEX-V5', true))()
-    end
-})
-
-Window:SelectTab(1)
-Window:ToggleTransparency(true)
