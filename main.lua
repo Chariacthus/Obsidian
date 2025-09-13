@@ -38,44 +38,32 @@ local WelcomeParagraph = Main:Paragraph({
     Locked = false,
 })
 
-local myParagraph = Universal:Paragraph({
-    Title = "Infinite Yield ",
+local Button = Universal:Button({
+    Title = "Infinite Yield",
     Desc = "Infinite Yield is a popular admin command script for Roblox.",
-    Color = "Grey",
-    Image = "https://i.pinimg.com/736x/03/d2/84/03d284fabde1086adc135cd8e855d483.jpg",
-    ImageSize = 30,
-    Thumbnail = "https://i.pinimg.com/736x/03/d2/84/03d284fabde1086adc135cd8e855d483.jpg",
-    ThumbnailSize = 80,
     Locked = false,
-Buttons = {
-    {
-        Title = "Load",
-        Callback = function()
-            loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source', true))()
-        end,
-    }
-}
+    Callback = function()
+        loadstring(game:HttpGet(('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'),true))()
+    end
 })
 
-local myParagraph = Universal:Paragraph({
+local Button = Universal:Button({
     Title = "Dark Dex",
     Desc = "Dark Dex is a Roblox tool that lets you explore and edit objects and scripts in a game.",
-    Color = "Black",
-    Image = "https://i.pinimg.com/736x/03/d2/84/03d284fabde1086adc135cd8e855d483.jpg",
-    ImageSize = 30,
-    Thumbnail = "https://i.pinimg.com/736x/03/d2/84/03d284fabde1086adc135cd8e855d483.jpg",
-    ThumbnailSize = 80,
     Locked = false,
-Buttons = {
-    {
-        Title = "Load",
-        Callback = function()
-            loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source', true))()
-        end,
-    }
-}
+    Callback = function()
+        loadstring(game:HttpGet('https://raw.githubusercontent.com/AlterX404/DarkDEX-V5/refs/heads/main/DarkDEX-V5', true))()
+    end
 })
 
+local Button = Universal:Button({
+    Title = "Dark Dex",
+    Desc = "Dark Dex is a Roblox tool that lets you explore and edit objects and scripts in a game.",
+    Locked = false,
+    Callback = function()
+        loadstring(game:HttpGet('https://raw.githubusercontent.com/AlterX404/DarkDEX-V5/refs/heads/main/DarkDEX-V5', true))()
+    end
+})
 
 Window:SelectTab(1)
 Window:ToggleTransparency(true)
